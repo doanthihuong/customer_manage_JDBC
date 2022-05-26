@@ -15,8 +15,10 @@
 <body>
 <h1> Danh sách khách hàng</h1>
 <a href="/customers?action=create">Tạo mới</a>
+<a href="/customers?action=find">Tìm kiếm</a>
 <c:forEach var="cus" items="${dskh}">
-    <h2 >${cus.id},${cus.name},${cus.age}   <a href="/customers?action=edit&id=${cus.id}">Sửa</a>  </h2>
+    <h2 >${cus.id},${cus.name},${cus.age}   <a href="/customers?action=edit&id=${cus.id}">Sửa</a>
+        <a href="/customers?action=delete&id=${cus.id}">Xóa</a></h2>
 
 </c:forEach>
 

@@ -16,6 +16,9 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
+
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
@@ -31,10 +34,37 @@ public class CustomerServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
-                
+            case "delete":
+                try {
+                    deleteCustomer(request,response);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "find":
+                try {
+                    showFindForm(request,response);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 showList(request, response);
         }
+    }
+
+    private void showFindForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+   RequestDispatcher requestDispatcher=request.getRequestDispatcher("customer/find.jsp");
+//   String name =request.getParameter("name");
+//   List<Customer> customers=customerDAO.findByName(name);
+//   request.setAttribute("find",customers);
+   requestDispatcher.forward(request,response);
+    }
+
+    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+   int id = Integer.parseInt(request.getParameter("id"));
+   customerDAO.delete(id);
+   response.sendRedirect("/customers");
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -59,6 +89,9 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
+
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
@@ -78,8 +111,26 @@ public class CustomerServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
+            case "find":
+                try {
+                    findCustomer(request,response);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
+
+
+    private void findCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("customer/find.jsp");
+        String key = request.getParameter("name");
+        List<Customer> customers = customerDAO.findByName(key);
+        request.setAttribute("find", customers);
+        requestDispatcher.forward(request, response);
+    }
+
+
 
     private void editCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
      int id = Integer.parseInt(request.getParameter("id"));

@@ -11,11 +11,13 @@ public interface ICustomerDAO {
 
     public int findIndexById(int id);
 
+    public List<Customer> findByName(String key) throws SQLException;
+
     public Customer findById(int id) throws SQLException;
 
     public List<Customer> findAll();
 
-    public void delete(int id) throws SQLException;
+    public boolean delete(int id) throws SQLException;
 
     public void update(int id, Customer customer) throws SQLException;
 }
